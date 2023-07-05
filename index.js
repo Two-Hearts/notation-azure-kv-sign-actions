@@ -61,6 +61,7 @@ async function setupPlguin() {
       const url = getDownloadURL()
       const HOME = process.env.HOME;
       const pluginPath = HOME + `/.config/notation/plugins/${akv_plugin_name}`
+      console.log(`pluginPath is ${pluginPath}`);
       fs.mkdirSync(pluginPath, { recursive: true, })
 
       const pathToTarball = await tc.downloadTool(url);
