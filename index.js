@@ -62,7 +62,8 @@ async function setupPlguin() {
       const HOME = process.env.HOME;
       const pluginPath = HOME + `/.config/notation/plugins/${akv_plugin_name}`
       console.log(`pluginPath is ${pluginPath}`);
-      fs.mkdirSync(pluginPath, { recursive: true, })
+      let mk_output = fs.mkdirSync(pluginPath, { recursive: true, })
+      console.log(`mk_output is ${mk_output}`);
 
       const pathToTarball = await tc.downloadTool(url);
       const extract = url.endsWith('.zip') ? tc.extractZip : tc.extractTar;
