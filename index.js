@@ -36,7 +36,7 @@ function getDownloadURL() {
 
 async function sign() {
   try {
-    setupPlguin()
+    await setupPlguin()
     const akv_key_id = core.getInput('key_id');
     const target_artifact_ref = core.getInput('target_artifact_reference');
     if (process.env.NOTATION_EXPERIMENTAL) {
@@ -59,11 +59,8 @@ async function setupPlguin() {
       console.log('notation plugin install output:\n', output);
     } else {
       const url = getDownloadURL()
-      const HOME = process.env.HOME;
-      const pluginPath = HOME + `/.config/notation/plugins/${akv_plugin_name}`
-      console.log(`pluginPath is ${pluginPath}`);
-      let mk_output = fs.mkdirSync(pluginPath, { recursive: true, })
-      console.log(`mk_output is ${mk_output}`);
+      const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
+      fs.mkdirSync(pluginPath, { recursive: true, })
 
       const pathToTarball = await tc.downloadTool(url);
       const extract = url.endsWith('.zip') ? tc.extractZip : tc.extractTar;
