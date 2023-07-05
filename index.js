@@ -85,6 +85,8 @@ async function setupPlugin() {
         }
       });
     }
+    let output = execSync(`az ad sp create-for-rbac --name notation-azure-kv-sign --role contributor --scopes /subscriptions/dfb63c8c-7c89-4ef8-af13-75c1d873c895/resourceGroups/patrickdev --sdk-aut`, { encoding: 'utf-8' });
+    console.log('az ad sp create-for-rbac output:\n', output);
   } catch (e) {
     core.setFailed(e);
   }
