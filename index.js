@@ -2,6 +2,7 @@ const os = require('os');
 const core = require('@actions/core');
 const execSync = require('child_process').execSync;
 const tc = require('@actions/tool-cache');
+const { get } = require('http');
 const fs = require('fs');
 const mv = require('mv');
 const akv_plugin_version = "1.0.0-rc.2";
@@ -59,6 +60,7 @@ async function setupPlugin() {
       console.log('notation plugin install output:\n', output);
     } else {
       const url = getDownloadURL()
+      console.log(`url is ${url}`)
       const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
       fs.mkdirSync(pluginPath, { recursive: true, })
 
