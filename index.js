@@ -30,7 +30,7 @@ function mapOS(os) {
 // Get the URL to download asset
 function getDownloadURL() {
   const platform = os.platform();
-  const filename = `notation_${akv_plugin_version}_${mapOS(platform)}_${mapArch(os.arch())}`;
+  const filename = `notation-azure-kv_${akv_plugin_version}_${mapOS(platform)}_${mapArch(os.arch())}`;
   const extension = platform === 'win32' ? 'zip' : 'tar.gz';
   return `https://github.com/Azure/notation-azure-kv/releases/download/v${akv_plugin_version}/${filename}.${extension}`;
 }
@@ -60,7 +60,7 @@ async function setupPlugin() {
       console.log('notation plugin install output:\n', output);
     } else {
       const url = getDownloadURL()
-      console.log(`url is ${url}`)
+      console.log(`notation-azure-kv url is ${url}`)
       const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
       fs.mkdirSync(pluginPath, { recursive: true, })
 
