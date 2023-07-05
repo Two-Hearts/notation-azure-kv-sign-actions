@@ -1,2 +1,2 @@
-# notation-akv-sign-actions
-Github Actions `notation sign` with notation-akv-plugin.
+# notation-azure-kv-sign-actions
+Github Actions `notation sign` with notation-azure-kv plugin.
