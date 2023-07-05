@@ -1,3 +1,4 @@
+const os = require('os');
 const core = require('@actions/core');
 const execSync = require('child_process').execSync;
 const tc = require('@actions/tool-cache');
@@ -58,7 +59,8 @@ async function setupPlguin() {
       console.log('notation plugin install output:\n', output);
     } else {
       const url = getDownloadURL()
-      const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
+      const HOME = process.env.HOME;
+      const pluginPath = HOME + `/.config/notation/plugins/${akv_plugin_name}`
       fs.mkdirSync(pluginPath, { recursive: true, })
 
       const pathToTarball = await tc.downloadTool(url);
