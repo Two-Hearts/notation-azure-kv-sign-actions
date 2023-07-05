@@ -36,22 +36,22 @@ function getDownloadURL() {
 
 async function sign() {
   try {
-    await setupPlguin()
-    const akv_key_id = core.getInput('key_id');
-    const target_artifact_ref = core.getInput('target_artifact_reference');
-    if (process.env.NOTATION_EXPERIMENTAL) {
-      let output = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
-      console.log('notation sign output:\n', output);
-    } else {
-      let output = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
-      console.log('notation sign output:\n', output);
-    }
+    setupPlugin()
+    // const akv_key_id = core.getInput('key_id');
+    // const target_artifact_ref = core.getInput('target_artifact_reference');
+    // if (process.env.NOTATION_EXPERIMENTAL) {
+    //   let output = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+    //   console.log('notation sign output:\n', output);
+    // } else {
+    //   let output = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+    //   console.log('notation sign output:\n', output);
+    // }
   } catch (e) {
     core.setFailed(e);
   }
 }
 
-async function setupPlguin() {
+async function setupPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
     if (plugin_oci_ref) {
