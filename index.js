@@ -37,7 +37,7 @@ function getDownloadURL() {
 
 async function sign() {
   try {
-    setupPlugin()
+    await setupPlugin()
     const akv_key_id = core.getInput('key_id');
     const target_artifact_ref = core.getInput('target_artifact_reference');
     if (process.env.NOTATION_EXPERIMENTAL) {
