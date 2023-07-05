@@ -1,13 +1,18 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: notation-azure-kv-sign
+description: notation sign with notation akv plugin
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  key_id:
+    description: Key identifier for the signing key pair from AKV
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  target_artifact_reference:
+     description: 'Reference of the target artifact to be signed. <registry>/<repo>@<digest>'
+     required: true
+  plugin_config:
+     description: '{key}={value} pairs that are passed as it is to akv plugin'
+     required: false
+  plugin_oci_ref:
+     description: 'Reference of notation akv plugin as OCI artifact'
+     required: false
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: node16
+  main: dist/index.js
