@@ -48,9 +48,11 @@ async function sign() {
     const akv_key_id = core.getInput('key_id');
     const target_artifact_ref = core.getInput('target_artifact_reference');
     if (process.env.NOTATION_EXPERIMENTAL) {
-      execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      let output = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      console.log('notation sign output:\n', output)
     } else {
-      execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      let output = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      console.log('notation sign output:\n', output)
     }
   } catch (e) {
     core.setFailed(e);
