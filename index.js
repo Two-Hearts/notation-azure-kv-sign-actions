@@ -64,20 +64,20 @@ async function setupAKVPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
     if (plugin_oci_ref) {
-      let output = execSync(`notation plugin install --name ${akv_plugin_name} ${plugin_oci_ref}`, { encoding: 'utf-8' });
-      console.log('notation plugin install output:\n', output);
+      execSync(`notation plugin install --name ${akv_plugin_name} ${plugin_oci_ref}`, { encoding: 'utf-8' });
+      console.log('Successfully installed notation-azure-akv plugin with `notation plugin install`');
     } else {
-      const url = getDownloadURL()
-      console.log(`notation-azure-kv url is ${url}`)
-      const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
-      fs.mkdirSync(pluginPath, { recursive: true, })
+      const url = getDownloadURL();
+      console.log(`notation-azure-kv url is ${url}`);
+      const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`;
+      fs.mkdirSync(pluginPath, { recursive: true, });
 
       const pathToTarball = await tc.downloadTool(url);
       const extract = url.endsWith('.zip') ? tc.extractZip : tc.extractTar;
       const pathToPluginDownload = await extract(pathToTarball);
 
-      const currentPath = path.join(pathToPluginDownload, "/", `notation-${akv_plugin_name}`)
-      const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`)
+      const currentPath = path.join(pathToPluginDownload, "/", `notation-${akv_plugin_name}`);
+      const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`);
 
       mv(currentPath, destinationPath, function (err) {
         if (err) {
@@ -91,7 +91,7 @@ async function setupAKVPlugin() {
         }
       });
     }
-    // set necessary permissions to Sign
+    // set necessary AKV permissions to Sign
     execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
     let output = execSync(`az keyvault set-policy -n ${akv_name} --secret-permissions get list --key-permissions sign --certificate-permissions get --spn ${azure_service_principle_client_id}`, { encoding: 'utf-8' });
     console.log('az keyvault set-policy output:\n', output);
