@@ -37,7 +37,7 @@ function getDownloadURL() {
 
 async function sign() {
   try {
-    setupPlugin()
+    await setupPlugin()
     let output = execSync(`notation plugin ls`, { encoding: 'utf-8' });
     console.log('notation plugin list output:\n', output);
     const akv_key_id = core.getInput('key_id');
@@ -54,7 +54,7 @@ async function sign() {
   }
 }
 
-function setupPlugin() {
+async function setupPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
     if (plugin_oci_ref) {
@@ -66,9 +66,9 @@ function setupPlugin() {
       const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
       fs.mkdirSync(pluginPath, { recursive: true, })
 
-      const pathToTarball = tc.downloadTool(url);
+      const pathToTarball = await tc.downloadTool(url);
       const extract = url.endsWith('.zip') ? tc.extractZip : tc.extractTar;
-      const pathToPluginDownload = extract(pathToTarball);
+      const pathToPluginDownload = await extract(pathToTarball);
 
       const currentPath = path.join(pathToPluginDownload, "/", `notation-${akv_plugin_name}`)
       const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`)
