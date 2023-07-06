@@ -37,7 +37,7 @@ function getDownloadURL() {
 
 async function sign() {
   try {
-    await setupPlugin()
+    setupPlugin()
     let output = execSync(`notation plugin ls`, { encoding: 'utf-8' });
     console.log('notation plugin list output:\n', output);
     const akv_key_id = core.getInput('key_id');
@@ -54,7 +54,7 @@ async function sign() {
   }
 }
 
-async function setupPlugin() {
+function setupPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
     if (plugin_oci_ref) {
@@ -66,9 +66,9 @@ async function setupPlugin() {
       const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
       fs.mkdirSync(pluginPath, { recursive: true, })
 
-      const pathToTarball = await tc.downloadTool(url);
+      const pathToTarball = tc.downloadTool(url);
       const extract = url.endsWith('.zip') ? tc.extractZip : tc.extractTar;
-      const pathToPluginDownload = await extract(pathToTarball);
+      const pathToPluginDownload = extract(pathToTarball);
 
       const currentPath = path.join(pathToPluginDownload, "/", `notation-${akv_plugin_name}`)
       const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`)
@@ -85,8 +85,13 @@ async function setupPlugin() {
         }
       });
     }
-    let output = execSync(`az ad sp create-for-rbac --name notation-azure-kv-sign --role contributor --scopes /subscriptions/dfb63c8c-7c89-4ef8-af13-75c1d873c895/resourceGroups/patrickdev --sdk-aut`, { encoding: 'utf-8' });
-    console.log('az ad sp create-for-rbac output:\n', output);
+    const akv_subscription_id = process.env.AKV_SUBSCRIPTION_ID
+    let output = execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
+    console.log('az account set output:\n', output);
+    const akv_name = process.env.AKV_NAME
+    const azure_service_principle_client_id = process.env.AZURE_SERVICE_PRINCIPLE_CLIENT_ID
+    output = execSync(`az keyvault set-policy -n ${akv_name} --secret-permissions get list --key-permissions sign --certificate-permissions get --spn ${azure_service_principle_client_id}`, { encoding: 'utf-8' });
+    console.log('az keyvault set-policy output:\n', output);
   } catch (e) {
     core.setFailed(e);
   }
