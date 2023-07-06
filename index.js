@@ -46,13 +46,23 @@ async function sign() {
     let output = execSync(`notation plugin ls`, { encoding: 'utf-8' });
     console.log('notation plugin list output:\n', output);
     const akv_key_id = core.getInput('key_id');
+    const cert_bundle_filepath = core.getInput('cert_bundle_filepath');
     const target_artifact_ref = core.getInput('target_artifact_reference');
+    let signOutput;
     if (process.env.NOTATION_EXPERIMENTAL) {
-      let output = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
-      console.log('notation sign output:\n', output);
+      if (cert_bundle_filepath) {
+        signOutput = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} --plugin-config=ca_certs=${cert_bundle_filepath} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      } else {
+        signOutput = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      }
+      console.log('notation sign output:\n', signOutput);
     } else {
-      let output = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
-      console.log('notation sign output:\n', output);
+      if (cert_bundle_filepath) {
+        signOutput = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} --plugin-config=ca_certs=${cert_bundle_filepath} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      } else {
+        signOutput = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
+      }
+      console.log('notation sign output:\n', signOutput);
     }
   } catch (e) {
     core.setFailed(e);

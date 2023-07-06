@@ -7,8 +7,8 @@ inputs:
   target_artifact_reference:
      description: 'Reference of the target artifact to be signed. <registry>/<repo>@<digest>'
      required: true
-  plugin_config:
-     description: '{key}={value} pairs that are passed as it is to akv plugin'
+  cert_bundle_filepath:
+     description: 'cert bundle file path for signing with notation-azure-kv plugin'
      required: false
   plugin_oci_ref:
      description: 'Reference of notation akv plugin as OCI artifact'
