@@ -65,17 +65,17 @@ async function setupAKVPlugin() {
       execSync(`notation plugin install --name ${akv_plugin_name} ${plugin_oci_ref}`, { encoding: 'utf-8' });
       console.log('Successfully installed notation-azure-akv plugin with `notation plugin install`');
     } else {
-      const url = getDownloadURL()
-      console.log(`notation-azure-kv url is ${url}`)
-      const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`
-      fs.mkdirSync(pluginPath, { recursive: true, })
+      const url = getDownloadURL();
+      console.log(`notation-azure-kv url is ${url}`);
+      const pluginPath = os.homedir() + `/.config/notation/plugins/${akv_plugin_name}`;
+      fs.mkdirSync(pluginPath, { recursive: true, });
 
       const pathToTarball = await tc.downloadTool(url);
       const extract = url.endsWith('.zip') ? tc.extractZip : tc.extractTar;
       const pathToPluginDownload = await extract(pathToTarball);
 
-      const currentPath = path.join(pathToPluginDownload, "/", `notation-${akv_plugin_name}`)
-      const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`)
+      const currentPath = path.join(pathToPluginDownload, "/", `notation-${akv_plugin_name}`);
+      const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`);
 
       mv(currentPath, destinationPath, function (err) {
         if (err) {

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Two-Hearts/notation-azure-kv-sign-actions.git"
+    "url": "git+https://github.com/notation-playground/notation-azure-kv-sign-actions.git"
   },
   "keywords": [],
   "author": "patrickzheng",
