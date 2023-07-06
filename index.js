@@ -7,6 +7,9 @@ const fs = require('fs');
 const mv = require('mv');
 const akv_plugin_version = "1.0.0-rc.2";
 const akv_plugin_name = "azure-kv"
+const akv_subscription_id = process.env.AKV_SUBSCRIPTION_ID
+const akv_name = process.env.AKV_NAME
+const azure_service_principle_client_id = process.env.AZURE_SERVICE_PRINCIPLE_CLIENT_ID
 
 // Map arch to go releaser arch
 // Reference: https://nodejs.org/api/os.html#os_os_arch
@@ -37,7 +40,7 @@ function getDownloadURL() {
 
 async function sign() {
   try {
-    await setupPlugin()
+    await setupAKVPlugin()
     let output = execSync(`notation plugin ls`, { encoding: 'utf-8' });
     console.log('notation plugin list output:\n', output);
     const akv_key_id = core.getInput('key_id');
@@ -54,7 +57,7 @@ async function sign() {
   }
 }
 
-async function setupPlugin() {
+async function setupAKVPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
     if (plugin_oci_ref) {
@@ -85,12 +88,8 @@ async function setupPlugin() {
         }
       });
     }
-    const akv_subscription_id = process.env.AKV_SUBSCRIPTION_ID
-    let output = execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
-    console.log('az account set output:\n', output);
-    const akv_name = process.env.AKV_NAME
-    const azure_service_principle_client_id = process.env.AZURE_SERVICE_PRINCIPLE_CLIENT_ID
-    output = execSync(`az keyvault set-policy -n ${akv_name} --secret-permissions get list --key-permissions sign --certificate-permissions get --spn ${azure_service_principle_client_id}`, { encoding: 'utf-8' });
+    execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
+    let output = execSync(`az keyvault set-policy -n ${akv_name} --secret-permissions get list --key-permissions sign --certificate-permissions get --spn ${azure_service_principle_client_id}`, { encoding: 'utf-8' });
     console.log('az keyvault set-policy output:\n', output);
   } catch (e) {
     core.setFailed(e);
