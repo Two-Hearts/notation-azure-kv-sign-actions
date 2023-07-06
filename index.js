@@ -48,11 +48,9 @@ async function sign() {
     const akv_key_id = core.getInput('key_id');
     const target_artifact_ref = core.getInput('target_artifact_reference');
     if (process.env.NOTATION_EXPERIMENTAL) {
-      let output = execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
-      console.log('notation sign output:\n', output);
+      execSync(`notation sign --signature-format cose --allow-referrers-api --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
     } else {
-      let output = execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
-      console.log('notation sign output:\n', output);
+      execSync(`notation sign --signature-format cose --id ${akv_key_id} --plugin ${akv_plugin_name} ${target_artifact_ref}`, { encoding: 'utf-8' });
     }
   } catch (e) {
     core.setFailed(e);
@@ -64,8 +62,8 @@ async function setupAKVPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
     if (plugin_oci_ref) {
-      let output = execSync(`notation plugin install --name ${akv_plugin_name} ${plugin_oci_ref}`, { encoding: 'utf-8' });
-      console.log('notation plugin install output:\n', output);
+      execSync(`notation plugin install --name ${akv_plugin_name} ${plugin_oci_ref}`, { encoding: 'utf-8' });
+      console.log('Successfully installed notation-azure-akv plugin with `notation plugin install`');
     } else {
       const url = getDownloadURL()
       console.log(`notation-azure-kv url is ${url}`)
@@ -91,7 +89,7 @@ async function setupAKVPlugin() {
         }
       });
     }
-    // set necessary permissions to Sign
+    // set necessary AKV permissions to Sign
     execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
     let output = execSync(`az keyvault set-policy -n ${akv_name} --secret-permissions get list --key-permissions sign --certificate-permissions get --spn ${azure_service_principle_client_id}`, { encoding: 'utf-8' });
     console.log('az keyvault set-policy output:\n', output);
