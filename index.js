@@ -38,6 +38,8 @@ function getDownloadURL() {
   return `https://github.com/Azure/notation-azure-kv/releases/download/v${akv_plugin_version}/${filename}.${extension}`;
 }
 
+// sign the target artifact with Notation
+// TODO: add cert bundle!!
 async function sign() {
   try {
     await setupAKVPlugin()
@@ -57,6 +59,7 @@ async function sign() {
   }
 }
 
+// setup notation-azure-kv plugin and related permissions to Sign.
 async function setupAKVPlugin() {
   try {
     const plugin_oci_ref = core.getInput('plugin_oci_ref');
@@ -88,6 +91,7 @@ async function setupAKVPlugin() {
         }
       });
     }
+    // set necessary permissions to Sign
     execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
     let output = execSync(`az keyvault set-policy -n ${akv_name} --secret-permissions get list --key-permissions sign --certificate-permissions get --spn ${azure_service_principle_client_id}`, { encoding: 'utf-8' });
     console.log('az keyvault set-policy output:\n', output);
