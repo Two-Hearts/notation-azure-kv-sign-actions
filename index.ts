@@ -94,15 +94,12 @@ async function setupAKVPlugin() {
             const destinationPath = path.join(pluginPath, "/", `notation-${akv_plugin_name}`);
 
             mv.default(currentPath, destinationPath, function (err: Error) {
-                if (err) {
-                    throw err
-                } else {
-                    console.log(`Successfully moved the plugin file to ${destinationPath}`);
-                    fs.chmod(destinationPath, 0o755, (err) => {
-                        if (err) throw err;
-                        console.log(`The permissions for file "${destinationPath}" have been changed`);
-                    });
-                }
+                if (err) throw err;
+                console.log(`Successfully moved the plugin file to ${destinationPath}`);
+                fs.chmod(destinationPath, 0o755, (err) => {
+                    if (err) throw err;
+                    console.log(`Successfully changed permission for file "${destinationPath}"`);
+                });
             });
         }
         execSync(`az account set -s ${akv_subscription_id}`, { encoding: 'utf-8' });
