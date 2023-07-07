@@ -2,9 +2,9 @@
   "name": "notation-azure-kv-sign",
   "version": "1.0.0",
   "description": "notation sign with notation akv plugin",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "build": "ncc build index.js -o dist --source-map --minify --license licenses.txt"
+    "build": "ncc build index.ts -o dist --source-map --minify --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/tool-cache": "^2.0.1",
-    "mv": "^2.1.1"
+    "@types/mv": "^2.1.2",
+    "@types/node": "^20.4.0"
   }
 }
